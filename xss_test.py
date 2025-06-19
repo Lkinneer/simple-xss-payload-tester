@@ -192,6 +192,8 @@ def begin_test():
             .right {{ flex: 1; margin-left: 40px; }}
             .description {{ max-width: 700px; margin: 0 auto 20px auto; text-align: left; font-size: 1.1em; background: #f8f8f8; padding: 16px; border-radius: 8px; border: 1px solid #ddd; }}
             .centered-heading {{ text-align: center; margin-top: 0; }}
+            .centered-content {{ display: flex; flex-direction: column; align-items: center; }}
+            .inject-form-wrapper {{ width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }}
         </style>
         <script>
         function refreshIframes() {{
@@ -210,16 +212,22 @@ def begin_test():
                     <strong>Instructions:</strong><br>
                     Enter your XSS payloads in the <b>Set inject value</b> text box. The value you provide will be dynamically included in the responses of the test bed pages which are rendered in iframes below. If your payload successfully loads a script from the <code>/</code> endpoint, the event will be recorded and displayed in the <b>Submitted Successes</b> panel on the right. Use this interface to test and validate XSS payload effectiveness in a controlled environment.<br><br>
                     An example payload could be: &lt;script src=&quot;/&quot;&gt;&lt;/script&gt;<br><br>
-                    For more information on XSS polyglots, see <a href="https://blog.ostorlab.co/polyglot-xss.html" target="_blank">https://blog.ostorlab.co/polyglot-xss.html</a>.
+                    Code for test cases comes from this excelent blog post on polyglot XSS.  <a href="https://blog.ostorlab.co/polyglot-xss.html" target="_blank">https://blog.ostorlab.co/polyglot-xss.html</a>.
                 </div>
-                <form method="post" style="margin-bottom:20px;">
-                    <label for="inject_value">Set inject value:</label>
-                    <input type="text" id="inject_value" name="inject_value" style="width:400px;">
-                    <button type="submit">Update</button>
-                </form>
-                <div style="color:green;">{message}</div>
-                {iframes}
-                {'<script>refreshIframes();</script>' if refresh_iframes else ''}
+                <div class="centered-content">
+                    <div class="inject-form-wrapper">
+                        <form method="post">
+                            <label for="inject_value">Set inject value:</label>
+                            <input type="text" id="inject_value" name="inject_value" style="width:400px;">
+                            <button type="submit">Update</button>
+                        </form>
+                        <div style="color:green;">{message}</div>
+                    </div>
+                    <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                        {iframes}
+                        {'<script>refreshIframes();</script>' if refresh_iframes else ''}
+                    </div>
+                </div>
             </div>
             <div class="right">
                 <iframe src="/success_table" width="400" height="800" style="border:1px solid #ccc;"></iframe>
